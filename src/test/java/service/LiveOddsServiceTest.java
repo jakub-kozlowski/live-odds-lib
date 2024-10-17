@@ -1,9 +1,9 @@
+package service;
+
 import domain.Match;
 import domain.Team;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.LiveOddsService;
-import service.TeamService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
