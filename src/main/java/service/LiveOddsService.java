@@ -30,16 +30,16 @@ public class LiveOddsService {
         matches.removeIf(match -> match.getHomeTeam().equals(homeTeam) && match.getAwayTeam().equals(awayTeam));
     }
 
-    Optional<Match> findMatch(Team homeTeam, Team awayTeam) {
-        return matches.stream()
-                .filter(match -> match.getHomeTeam().equals(homeTeam) && match.getAwayTeam().equals(awayTeam))
-                .findAny();
-    }
-
     public List<Match> getMatchesSummary() {
         return matches.stream()
                 .sorted(Comparator.comparing((Match match) -> match.getHomeTeamScore() + match.getAwayTeamScore())
                         .reversed())
                 .toList();
+    }
+
+    Optional<Match> findMatch(Team homeTeam, Team awayTeam) {
+        return matches.stream()
+                .filter(match -> match.getHomeTeam().equals(homeTeam) && match.getAwayTeam().equals(awayTeam))
+                .findAny();
     }
 }
