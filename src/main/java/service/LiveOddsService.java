@@ -18,7 +18,17 @@ public class LiveOddsService {
         matches.add(new Match(homeTeam, awayTeam));
     }
 
-    public Optional<Match> findMatch(Team homeTeam, Team awayTeam) {
+    public void updateMatchScore(Team homeTeam, Team awayTeam, int homeTeamScore, int awayTeamScore) {
+        Match match = findMatch(homeTeam, awayTeam).orElseThrow();
+        match.setHomeTeamScore(homeTeamScore);
+        match.setAwayTeamScore(awayTeamScore);
+    }
+
+    public void finishMatch(Team homeTeam, Team awayTeam) {
+        matches.removeIf(match -> match.getHomeTeam().equals(homeTeam) && match.getAwayTeam().equals(awayTeam));
+    }
+
+    Optional<Match> findMatch(Team homeTeam, Team awayTeam) {
         return matches.stream()
                 .filter(match -> match.getHomeTeam().equals(homeTeam) && match.getAwayTeam().equals(awayTeam))
                 .findAny();

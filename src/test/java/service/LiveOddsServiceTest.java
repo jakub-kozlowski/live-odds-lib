@@ -12,20 +12,45 @@ class LiveOddsServiceTest {
     LiveOddsService liveOddsService;
     TeamService teamService;
 
+    Team mexico;
+    Team canada;
+
     @BeforeEach
     void setUp() {
         liveOddsService = new LiveOddsService();
         teamService = new TeamService();
+
+        mexico = teamService.get("Mexico");
+        canada = teamService.get("Canada");
     }
 
     @Test
     void whenNewMatchAdded_thenScoreIsNilNil() {
-        Team mexico = teamService.get("Mexico");
-        Team canada = teamService.get("Canada");
         liveOddsService.startNewMatch(mexico, canada);
 
         Match match = liveOddsService.findMatch(mexico, canada).get();
         assertThat(match.getHomeTeamScore()).isZero();
         assertThat(match.getAwayTeamScore()).isZero();
+    }
+
+    @Test
+    void canUpdateMatchScore() {
+        liveOddsService.startNewMatch(mexico, canada);
+
+        Match match = liveOddsService.findMatch(mexico, canada).get();
+        liveOddsService.updateMatchScore(mexico, canada, 2, 5);
+
+        assertThat(match.getHomeTeamScore()).isEqualTo(2);
+        assertThat(match.getAwayTeamScore()).isEqualTo(5);
+    }
+
+    @Test
+    void canFinishMatch() {
+        liveOddsService.startNewMatch(mexico, canada);
+        assertThat(liveOddsService.findMatch(mexico, canada)).isNotEmpty();
+
+        liveOddsService.finishMatch(mexico, canada);
+        assertThat(liveOddsService.findMatch(mexico, canada)).isEmpty();
+
     }
 }
