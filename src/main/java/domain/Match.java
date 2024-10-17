@@ -14,6 +14,7 @@ public class Match {
     @Setter
     private int awayTeamScore;
 
+
     public Match(Team homeTeam, Team awayTeam) {
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;

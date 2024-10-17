@@ -3,19 +3,21 @@ package service;
 import domain.Match;
 import domain.Team;
 
-import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 public class LiveOddsService {
 
-    private final ArrayList<Match> matches;
+    private final LinkedList<Match> matches;
 
     public LiveOddsService() {
-        matches = new ArrayList<>();
+        matches = new LinkedList<>();
     }
 
     public void startNewMatch(Team homeTeam, Team awayTeam) {
-        matches.add(new Match(homeTeam, awayTeam));
+        matches.addFirst(new Match(homeTeam, awayTeam));
     }
 
     public void updateMatchScore(Team homeTeam, Team awayTeam, int homeTeamScore, int awayTeamScore) {
@@ -32,5 +34,12 @@ public class LiveOddsService {
         return matches.stream()
                 .filter(match -> match.getHomeTeam().equals(homeTeam) && match.getAwayTeam().equals(awayTeam))
                 .findAny();
+    }
+
+    public List<Match> getMatchesSummary() {
+        return matches.stream()
+                .sorted(Comparator.comparing((Match match) -> match.getHomeTeamScore() + match.getAwayTeamScore())
+                        .reversed())
+                .toList();
     }
 }
